@@ -1,8 +1,10 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-const MissionReport = ({ missions }) => {
+const MissionReport = () => {
+    const missions = useSelector((state) => state.missions.missions);
     const totalMissions = missions.length;
-    const completedMissions = missions.filter(mission => mission.status === 'Completed').length;
+    const completedMissions = missions.filter((mission) => mission.status === 'Completed').length;
 
     return (
         <div>

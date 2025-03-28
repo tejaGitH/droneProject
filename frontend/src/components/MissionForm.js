@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { addMission } from '../redux/missions/missionSlice';
 import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
 
-const MissionForm = ({ onMissionAdded }) => {
+const MissionForm = () => {
     const [name, setName] = useState('');
     const [areaCoordinates, setAreaCoordinates] = useState('');
+    const dispatch = useDispatch();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await axios.post('http://localhost:5000/missions', {
-            name,
-            areaCoordinates,
-        });
-        onMissionAdded(response.data);
+        const missionData = { name, areaCoordinates };
+        dispatch(addMission(missionData));
         setName('');
         setAreaCoordinates('');
     };
@@ -23,24 +22,24 @@ const MissionForm = ({ onMissionAdded }) => {
             <Form.Group controlId="formMissionName">
                 <Form.Label>Mission Name</Form.Label>
                 <Form.Control
-                    type='text'
-                    placeholder='Enter Mission Name'
+                    type="text"
+                    placeholder="Enter Mission Name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
                 />
             </Form.Group>
-            <Form.Group controlId="formAreaCoordinates">
+            <Form.Group controlId="formAreaCoordinates" className="mt-2">
                 <Form.Label>Area Coordinates</Form.Label>
                 <Form.Control
-                    type='text'
-                    placeholder='Enter Area Coordinates'
+                    type="text"
+                    placeholder="Enter Area Coordinates"
                     value={areaCoordinates}
                     onChange={(e) => setAreaCoordinates(e.target.value)}
                     required
                 />
             </Form.Group>
-            <Button variant="primary" type='submit'>Create Mission</Button>
+            <Button variant="primary" type="submit" className="mt-3">Create Mission</Button>
         </Form>
     );
 };
