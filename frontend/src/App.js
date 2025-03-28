@@ -1,3 +1,4 @@
+// App.js
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -6,6 +7,7 @@ import MissionForm from './components/MissionForm';
 import MissionList from './components/MissionList';
 import MissionReport from './components/MissionReport';
 import MissionDetails from './components/MissionDetails';
+import MissionMap from './components/MissionMap';
 
 function App() {
     const dispatch = useDispatch();
@@ -19,11 +21,12 @@ function App() {
             <div className="App">
                 <h1 className="text-center mt-4">Drone Survey Management System</h1>
                 <MissionForm />
+                <MissionList />
+                <MissionReport />
+                <MissionMap />
                 <Routes>
-                    <Route path="/" element={<MissionList />} />
                     <Route path="/missions/:id" element={<MissionDetails />} />
                 </Routes>
-                <MissionReport />
             </div>
         </Router>
     );
