@@ -1,31 +1,38 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchMissionById } from '../redux/missions/missionSlice';
-import { Button } from 'react-bootstrap';
 
 const MissionDetails = () => {
     const { id } = useParams();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const mission = useSelector((state) => state.missions.selectedMission);
+    const mission = useSelector((state) => 
+        state.missions.missions.find((mission) => mission._id === id)
+    );
 
     useEffect(() => {
-        dispatch(fetchMissionById(id));
-    }, [dispatch, id]);
+        if (!mission) {
+            dispatch(fetchMissionById(id));
+        }
+    }, [dispatch, id, mission]);
 
-    if (!mission) return <p>Loading...</p>;
+    if (!mission) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div>
             <h2>Mission Details</h2>
-            <p>Name: {mission.name}</p>
-            <p>Coordinates: {mission.areaCoordinates}</p>
-            <p>Status: {mission.status}</p>
-            <p>Created At: {new Date(mission.createdAt).toLocaleString()}</p>
-            <Button variant="secondary" onClick={() => navigate('/')}>
-                Back to Mission List
-            </Button>
+            <p><strong>Name:</strong> {mission.name}</p>
+            <p><strong>Status:</strong> {mission.status || 'Pending'}</p>
+            <h3>Coordinates:</h3>
+            <ul>
+                {mission.coordinates.map((coord, index) => (
+                    <li key={index}>
+                        Latitude: {coord.lat}, Longitude: {coord.lng}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
