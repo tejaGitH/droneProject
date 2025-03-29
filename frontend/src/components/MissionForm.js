@@ -13,21 +13,13 @@ const MissionForm = () => {
 
     const handleCoordinateChange = (index, field, value) => {
         const updatedCoordinates = [...coordinates];
-        updatedCoordinates[index][field] = value;
+        updatedCoordinates[index][field] = parseFloat(value);
         setCoordinates(updatedCoordinates);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const formattedCoordinates = coordinates.map(coord => ({
-            lat: parseFloat(coord.lat),
-            lng: parseFloat(coord.lng),
-        }));
-        const mission = {
-            name,
-            areaCoordinates: formattedCoordinates,
-            status: 'Pending',
-        };
+        const mission = { name, coordinates };
         dispatch(addMission(mission));
         setName('');
         setCoordinates([{ lat: '', lng: '' }]);
@@ -43,7 +35,6 @@ const MissionForm = () => {
                 onChange={(e) => setName(e.target.value)}
                 required
             />
-            <h3>Coordinates</h3>
             {coordinates.map((coord, index) => (
                 <div key={index}>
                     <input

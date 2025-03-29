@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ListGroup, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { deleteMission, updateMissionStatus } from '../redux/missions/missionSlice';
 
 const MissionList = () => {
@@ -22,9 +21,7 @@ const MissionList = () => {
             <ListGroup>
                 {missions.map((mission) => (
                     <ListGroup.Item key={mission._id}>
-                        <Link to={`/missions/${mission._id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                            {mission.name} - Coordinates: {mission.areaCoordinates} - Status: {mission.status || 'Pending'}
-                        </Link>
+                        {mission.name} - Status: {mission.status || 'Pending'}
                         <Button 
                             variant={mission.status === 'Completed' ? 'warning' : 'success'} 
                             className="ms-2" 

@@ -1,3 +1,4 @@
+// missionSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
@@ -34,30 +35,24 @@ export const deleteMission = createAsyncThunk('missions/deleteMission', async (i
     await axios.delete(`http://localhost:5000/api/missions/${id}`);
     return id;
 });
+
+
+
 const missionSlice = createSlice({
     name: 'missions',
-    initialState: {
-        missions: [],
-        loading: false,
-        error: null,
-        selectedMission: null,
-    },
+    initialState: { missions: [], status: 'idle' },
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchMissions.pending, (state) => {
-                state.loading = true;
-            })
             .addCase(fetchMissions.fulfilled, (state, action) => {
-                state.loading = false;
                 state.missions = action.payload;
-            })
-            .addCase(fetchMissions.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.error.message;
+                console.log(state.missions);
             })
             .addCase(addMission.fulfilled, (state, action) => {
                 state.missions.push(action.payload);
+            })
+            .addCase(deleteMission.fulfilled, (state, action) => {
+                state.missions = state.missions.filter((mission) => mission._id !== action.payload);
             })
             .addCase(updateMissionStatus.fulfilled, (state, action) => {
                 const index = state.missions.findIndex((mission) => mission._id === action.payload._id);
@@ -65,11 +60,13 @@ const missionSlice = createSlice({
                     state.missions[index] = action.payload;
                 }
             })
-            .addCase(deleteMission.fulfilled, (state, action) => {
-                state.missions = state.missions.filter((mission) => mission._id !== action.payload);
-            })
             .addCase(fetchMissionById.fulfilled, (state, action) => {
-                state.selectedMission = action.payload;
+                const index = state.missions.findIndex((mission) => mission._id === action.payload._id);
+                if (index !== -1) {
+                    state.missions[index] = action.payload;
+                } else {
+                    state.missions.push(action.payload);
+                }
             });
     },
 });
