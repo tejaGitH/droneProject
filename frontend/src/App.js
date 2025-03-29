@@ -7,6 +7,7 @@ import MissionList from './components/MissionList';
 import MissionReport from './components/MissionReport';
 import MissionMap from './components/MissionMap';
 import FleetDashboard from './components/FleetDashboard';
+import MissionMonitor from './components/MissionMonitor';
 
 function App() {
     const dispatch = useDispatch();
@@ -20,16 +21,18 @@ function App() {
             <div className="App">
                 <h1 className="text-center mt-4">Drone Survey Management System</h1>
                 <nav className="mb-4 text-center">
-                    <Link to="/" className="mx-2">Home</Link>
-                    <Link to="/missions" className="mx-2">Mission List</Link>
-                    <Link to="/report" className="mx-2">Mission Report</Link>
-                    <Link to="/map" className="mx-2">Mission Map</Link>
-                    <Link to="/fleet" className="mx-2">Fleet Management</Link>
-                </nav>
+    <Link to="/" className="mx-2">Home</Link>
+    <Link to="/missions" className="mx-2">Mission List</Link>
+    <Link to="/report" className="mx-2">Mission Report</Link>
+    <Link to="/map" className="mx-2">Mission Map</Link>
+    <Link to="/fleet" className="mx-2">Fleet Management</Link>
+    <Link to="/monitor" className="mx-2">Mission Monitor</Link>
+</nav>
                 <MissionForm />
                 <Routes>
                     <Route path="/" element={<MissionList />} />
                     <Route path="/missions" element={<MissionList />} />
+                    <Route path="/monitor" element={<MissionMonitor />} />
                     <Route path="/report" element={<MissionReport />} />
                     <Route path="/map" element={<MissionMap />} />
                     <Route path="/fleet" element={<FleetDashboard />} />
