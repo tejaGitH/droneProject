@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAllDrones, getDroneById, updateDroneStatus } = require('../controllers/fleetController');
+const { getAllDrones, getDroneById, updateDroneStatus, getAvailableDrones } = require('../controllers/fleetController');
 
 // Get all drones
 router.get('/drones', getAllDrones);
@@ -10,5 +10,8 @@ router.get('/drones/:id', getDroneById);
 
 // Update drone status
 router.patch('/drones/:id', updateDroneStatus);
+
+// Get available drones
+router.get('/available', getAvailableDrones);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 
 // Mission Controller (controllers/missionController.js)
 const Mission = require('../models/Mission');
+const Drone = require('../models/Drone');
 
 // Create Mission
 exports.createMission = async (req, res) => {
@@ -55,5 +56,31 @@ exports.deleteMission = async (req, res) => {
         res.json({ message: 'Mission deleted successfully' });
     } catch (error) {
         res.status(400).json({ error: 'Error deleting mission' });
+    }
+};
+
+
+exports.assignDroneToMission = async (req, res) => {
+    try {
+        const { droneId } = req.body;
+        const mission = await Mission.findById(req.params.id);
+
+        if (!mission) return res.status(404).json({ error: 'Mission not found' });
+
+        // Check if the drone is available
+        const drone = await Drone.findOne({ _id: droneId, status: 'available' });
+        if (!drone) return res.status(400).json({ error: 'Drone not available' });
+
+        // Assign the drone and update statuses
+        mission.assignedDrone = drone._id;
+        mission.status = 'In-Progress';
+        drone.status = 'in-mission';
+
+        await mission.save();
+        await drone.save();
+
+        res.json({ message: 'Drone assigned successfully', mission });
+    } catch (error) {
+        res.status(400).json({ error: 'Error assigning drone to mission' });
     }
 };

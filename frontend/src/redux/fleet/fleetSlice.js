@@ -15,6 +15,17 @@ export const updateDroneStatus = createAsyncThunk(
         return response.data;
     }
 );
+export const fetchAvailableDrones = createAsyncThunk(
+    'fleet/fetchAvailableDrones',
+    async (_, { rejectWithValue }) => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/available');
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
 
 const fleetSlice = createSlice({
     name: 'fleet',
@@ -43,6 +54,17 @@ const fleetSlice = createSlice({
                 if (existingDrone) {
                     Object.assign(existingDrone, updatedDrone);
                 }
+            })
+            .addCase(fetchAvailableDrones.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchAvailableDrones.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.drones = action.payload;
+            })
+            .addCase(fetchAvailableDrones.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             });
     },
 });

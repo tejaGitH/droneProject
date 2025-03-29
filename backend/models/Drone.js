@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const droneSchema = new mongoose.Schema({
     droneId: { type: String, required: true, unique: true },
-    name: { type: String, required: true },
-    status: { type: String, default: 'Available' }, // Available, In Mission, Maintenance
+    model: { type: String },
+    status: { type: String, default: 'Available' }, // Add status field
+    batteryLevel: { type: Number, default: 100 },
     coordinates: {
-        lat: { type: Number, required: true },
-        lng: { type: Number, required: true }
+        lat: { type: Number, default: 0 },
+        lng: { type: Number, default: 0 },
     },
-    batteryLevel: { type: Number, default: 100 }, // Percentage (0-100)
-    lastUpdate: { type: Date, default: Date.now }
+    lastUpdate: { type: Date, default: Date.now },
 });
 
 const Drone = mongoose.model('Drone', droneSchema);

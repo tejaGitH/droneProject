@@ -36,11 +36,27 @@ export const deleteMission = createAsyncThunk('missions/deleteMission', async (i
     return id;
 });
 
+export const assignDroneToMission = createAsyncThunk(
+    'missions/assignDrone',
+    async ({ missionId, droneId }, { rejectWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:5000/api/${missionId}/assign-drone`, { droneId });
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
 
 
 const missionSlice = createSlice({
     name: 'missions',
-    initialState: { missions: [], status: 'idle' },
+    initialState: { 
+        missions: [],
+        status: 'idle',
+        error: null,
+     },
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -67,6 +83,21 @@ const missionSlice = createSlice({
                 } else {
                     state.missions.push(action.payload);
                 }
+            })
+            .addCase(assignDroneToMission.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(assignDroneToMission.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                // Update the mission with the assigned drone info
+                const index = state.missions.findIndex(mission => mission._id === action.payload._id);
+                if (index !== -1) {
+                    state.missions[index] = action.payload;
+                }
+            })
+            .addCase(assignDroneToMission.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.payload;
             });
     },
 });
