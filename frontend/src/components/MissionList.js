@@ -25,6 +25,7 @@ const MissionList = () => {
 
     const handleCloseModal = () => {
         setShowModal(false);
+        setSelectedMissionId(null);
     };
 
     return (
@@ -59,7 +60,7 @@ const MissionList = () => {
                 <MissionDetailsModal
                     show={showModal}
                     onClose={handleCloseModal}
-                    missionId={selectedMissionId}   // Pass the ID as a prop
+                    missionId={selectedMissionId} // Passing the ID only
                 />
             )}
         </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import { useSelector } from 'react-redux';
 import L from 'leaflet';
+import MissionDetailsModal from './MissionDetailsModal';
 
 const colors = ['red', 'blue', 'green', 'orange', 'purple', 'pink', 'cyan'];
 
@@ -18,12 +19,24 @@ const createCustomIcon = (color) => {
 const MissionMap = () => {
     const missions = useSelector((state) => state.missions.missions);
     const [mapData, setMapData] = useState([]);
+    const [selectedMissionId, setSelectedMissionId] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         if (missions && Array.isArray(missions)) {
             setMapData(missions);
         }
     }, [missions]);
+
+    const handleMarkerClick = (missionId) => {
+        setSelectedMissionId(missionId);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedMissionId(null);
+    };
 
     return (
         <div style={{ height: '400px', width: '100%', margin: '20px 0' }}>
@@ -35,8 +48,6 @@ const MissionMap = () => {
                 />
                 {mapData && mapData.map((mission, missionIndex) => {
                     const color = getColor(missionIndex);
-
-                    // Extracting coordinates
                     const coordinates = mission.coordinates.map((coord) => [coord.lat, coord.lng]);
 
                     return (
@@ -52,6 +63,9 @@ const MissionMap = () => {
                                     key={`${mission._id}-${index}`}
                                     position={position}
                                     icon={createCustomIcon(color)}
+                                    eventHandlers={{
+                                        click: () => handleMarkerClick(mission._id),
+                                    }}
                                 >
                                     <Popup>
                                         <strong>{mission.name}</strong><br />
@@ -64,6 +78,13 @@ const MissionMap = () => {
                     );
                 })}
             </MapContainer>
+            {selectedMissionId && (
+                <MissionDetailsModal
+                    show={showModal}
+                    onClose={handleCloseModal}
+                    missionId={selectedMissionId} // Passing the ID only
+                />
+            )}
         </div>
     );
 };

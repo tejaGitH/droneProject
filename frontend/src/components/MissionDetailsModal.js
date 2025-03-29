@@ -1,22 +1,14 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { fetchMissionById } from '../redux/missions/missionSlice';
+import { useSelector } from 'react-redux';
 
 const MissionDetailsModal = ({ show, onClose, missionId }) => {
-    const dispatch = useDispatch();
     const mission = useSelector((state) =>
         state.missions.missions.find((mission) => mission._id === missionId)
     );
 
-    useEffect(() => {
-        if (!mission) {
-            dispatch(fetchMissionById(missionId));
-        }
-    }, [dispatch, missionId, mission]);
-
     if (!mission) {
-        return <div>Loading...</div>;
+        return null;
     }
 
     return (
