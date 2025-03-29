@@ -1,3 +1,4 @@
+// Updated MissionDetailsModal Component
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -19,6 +20,7 @@ const MissionDetailsModal = ({ show, onClose, missionId }) => {
             <Modal.Body>
                 <p><strong>Name:</strong> {mission.name}</p>
                 <p><strong>Status:</strong> {mission.status || 'Pending'}</p>
+                <p><strong>Assigned Drone:</strong> {mission.assignedDrone || 'N/A'}</p>
                 <h3>Coordinates:</h3>
                 <ul>
                     {mission.coordinates.map((coord, index) => (

@@ -1,3 +1,4 @@
+// Updated MissionList Component
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ListGroup, Button } from 'react-bootstrap';
@@ -35,7 +36,7 @@ const MissionList = () => {
                 {missions.map((mission) => (
                     <ListGroup.Item key={mission._id} className="d-flex justify-content-between align-items-center">
                         <div onClick={() => handleViewDetails(mission._id)} style={{ cursor: 'pointer' }}>
-                            {mission.name} - Status: {mission.status || 'Pending'}
+                            {mission.name} - Assigned Drone: {mission.assignedDrone || 'N/A'}
                         </div>
                         <div>
                             <Button
@@ -60,7 +61,7 @@ const MissionList = () => {
                 <MissionDetailsModal
                     show={showModal}
                     onClose={handleCloseModal}
-                    missionId={selectedMissionId} // Passing the ID only
+                    missionId={selectedMissionId}
                 />
             )}
         </div>
